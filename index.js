@@ -29,10 +29,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-const notesRouter = require("./routers/notesRouter");
+const motorBikeRouter = require("./routers/motorBikeRouter");
 
 // Create route /
-app.use("/notes", notesRouter);
+app.use("/motorBikes", motorBikeRouter);
 
 
 // Start webserver on port 8000

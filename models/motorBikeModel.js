@@ -5,9 +5,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const MotorBikeSchema = new Schema({
-    title: String,
-    body: String,
-    author: String
+    power: String,
+    price: String,
+    name: String
 },
     {
         toJSON: {virtuals: true}

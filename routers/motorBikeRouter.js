@@ -1,6 +1,6 @@
 const express = require("express");
 
-const Note = require("../models/notesModel");
+const MotorBike = require("../models/motorBikeModel");
 
 //create route
 const router = express.Router();
@@ -15,22 +15,22 @@ router.get("/", async (req, res) => {
         res.status(415).send();
     }
     try {
-        let notes = await Note.find();
+        let motorBikes = await MotorBike.find();
 
-        let notesCollection = {
-            items: notes,
+        let motorBikeCollection = {
+            items: motorBikes,
             _links: {
                 self: {
-                    href: `${process.env.BASE_URI}notes/`
+                    href: `${process.env.BASE_URI}motorBikes/`
                 },
                 collection: {
-                    href: `${process.env.BASE_URI}notes/`
+                    href: `${process.env.BASE_URI}motorBikes/`
                 }
             },
             pagination: "Zet er nu iets in"
         }
-
-        res.json(notesCollection);
+        
+        res.json(motorBikeCollection);
     } catch {
         // no response from Database
         res.status(500).send()
@@ -42,11 +42,11 @@ router.get("/:_id", async (req, res) => {
     console.log(`GET request for detail ${req.params._id}`);
 
     try {
-        let note = await Note.findById(req.params._id);
-        if (note == null) {
+        let motorBike = await MotorBike.findById(req.params._id);
+        if (motorBike == null) {
             res.status(404).send();
         } else {
-            res.json(note)
+            res.json(motorBike)
         }
     } catch {
         // ID not found, send 404
@@ -67,7 +67,7 @@ router.post("/", (req, res, next) => {
 //middleware against empty values post
 router.post("/", async (req, res, next) => {
     console.log("Middleware to check for empty values for post")
-    if(req.body.title && req.body.body && req.body.author){
+    if(req.body.power && req.body.price && req.body.name){
         next();
     } else{
         res.status(400).send();
@@ -79,14 +79,14 @@ router.post("/", async (req, res, next) => {
 router.post("/", async (req, res) => {
     console.log("POST request for Collection /");
 
-    let note = Note({
-        title: req.body.title,
-        body: req.body.body,
-        author: req.body.author
+    let motorBike = MotorBike({
+        power: req.body.power,
+        price: req.body.price,
+        name: req.body.name
     })
 
     try {
-        await note.save();
+        await motorBike.save();
 
         res.status(201).send();
     } catch {
@@ -107,7 +107,7 @@ router.put("/:_id", async (req, res, next) => {
 //middleware against empty values put
 router.put("/:_id", async (req, res, next) => {
     console.log("PUT Middleware to check for empty values for post")
-    if(req.body.title && req.body.body && req.body.author){
+    if(req.body.power && req.body.price && req.body.name){
         next();
     } else{
         res.status(400).send();
@@ -116,15 +116,15 @@ router.put("/:_id", async (req, res, next) => {
 
 router.put("/:_id", async (req, res) => {
 
-    let note = await Note.findOneAndUpdate(req.params,
+    let motorBike = await MotorBike.findOneAndUpdate(req.params,
         {
-            title: req.body.title,
-            body: req.body.body,
-            author: req.body.author
+            power: req.body.power,
+            price: req.body.price,
+            name: req.body.name
         })
 
     try {
-        note.save();
+        motorBike.save();
         res.status(203).send();
     } catch {
         res.status(500).send();
@@ -134,7 +134,7 @@ router.put("/:_id", async (req, res) => {
 // Create route / delete
 router.delete("/:_id", async (req, res) => {
     try {
-        await Note.findByIdAndDelete(req.params._id);
+        await MotorBike.findByIdAndDelete(req.params._id);
         res.status(204).send();
     } catch {
         res.status(404).send();
